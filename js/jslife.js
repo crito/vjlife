@@ -98,17 +98,17 @@ var blinker = {
 var rPentomino = {
   turn: ON,
   cells: [
-  {x: 2 ,y: 3},
-  {x: 3, y: 2},
+  {x: 1 ,y: 2},
+  {x: 2, y: 1},
+  {x: 2, y: 2},
+  {x: 2, y: 3},
   {x: 3, y: 3},
-  {x: 3, y: 4},
-  {x: 4, y: 4},
     ]
 }
 
 // var DATA = tumbler;
-var DATA = blinker;
-// var DATA = rPentomino;
+// var DATA = blinker;
+var DATA = rPentomino;
 
 var initialGrid = function (/* size */) {
   var state = DATA.turn,
@@ -138,11 +138,28 @@ var series = function (initial, times) {
   }, [initial]);
 };
 
-var live = function (initial, tick) {
-  var stream = [initial];
-  setInterval(function () {
-    var c = newGeneration(_.last(stream));
+var App = function (size) {
+  this.interval = 300;
+  this.generations = [initialGrid(size)];
+}
+
+App.prototype.play = function () {
+  var that = this;
+
+  if (this.intervalID) { this.stop(); }
+  this.intervalID = setInterval(function () {
+    var c = newGeneration(_.last(that.generations));
     logGrid(c);
-    stream.push(c);
-  }, tick);
+    that.generations.push(c);
+  }, this.interval);
+};
+
+App.prototype.stop = function () {
+  clearInterval(this.intervalID);
+  this.intervalID = undefined;
+};
+
+App.prototype.setInterval = function (newInterval) {
+  this.interval = newInterval;
+  this.play();
 };
