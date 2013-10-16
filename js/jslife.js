@@ -141,6 +141,7 @@ var series = function (initial, times) {
 var App = function (size) {
   this.interval = 300;
   this.generations = [initialGrid(size)];
+  this.current = 0;
 }
 
 App.prototype.play = function () {
@@ -148,9 +149,16 @@ App.prototype.play = function () {
 
   if (this.intervalID) { this.stop(); }
   this.intervalID = setInterval(function () {
-    var c = newGeneration(_.last(that.generations));
+    var c;
+    if (that.current < 0) {
+      console.log(that.current, that.generations.length);
+      c = that.generations[that.current];
+      that.current += 1;
+    } else {
+      c = newGeneration(_.last(that.generations));
+      that.generations.push(c);
+    }
     logGrid(c);
-    that.generations.push(c);
   }, this.interval);
 };
 
@@ -163,3 +171,18 @@ App.prototype.setInterval = function (newInterval) {
   this.interval = newInterval;
   this.play();
 };
+
+App.prototype.stepBack = function () {
+  if (this.intervalID) { this.stop(); }
+  // FIXME: check that current doesn't get bigger than generations.length
+  this.current -= 1;
+
+  return this.current;
+}
+
+App.prototype.stepForward = function () {
+  if (this.intervalID) { this.stop(); }
+  if (this.current < 0) { this.current += 1; }
+
+  return this.current;
+}
