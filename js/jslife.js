@@ -3,9 +3,9 @@
 var ON  = true;
 var OFF = false;
 
-var buildGrid = function (size) {
-  return _.map(_.range(size), function (x) {
-    return _.map(_.range(size), function (y) {
+var buildGrid = function (sizeX, sizeY) {
+  return _.map(_.range(sizeX), function (x) {
+    return _.map(_.range(sizeY), function (y) {
       return OFF;
     });
   });
@@ -51,10 +51,10 @@ var isLiveCell = function (cell, count) {
   ))(cell, count);
 }
 
-var logGrid = function (grid) {
+var logGrid = function (grid, offSymbol) {
   console.log(_.reduce(grid, function (log, row) {
     return log + '\n' + _.reduce(row, function (memo, cell) {
-        return memo += cell ? "X" : " ";
+        return memo += cell ? "X" : offSymbol;
       }, "");
   }, ""));
   // _.reduce(grid, function (log, row) {
@@ -107,16 +107,16 @@ var rPentomino = {
 }
 
 // var DATA = tumbler;
-// var DATA = blinker;
-var DATA = rPentomino;
+var DATA = blinker;
+// var DATA = rPentomino;
 
-var initialGrid = function (/* size */) {
+var initialGrid = function (sizeX, sizeY) {
   var state = DATA.turn,
       size = arguments[0] ? arguments[0] : 8;
   return _.reduce(DATA.cells, function (memo, pos) {
     memo[pos.x][pos.y] = state;
     return memo;
-  }, buildGrid(size));
+  }, buildGrid(sizeX, sizeY));
 };
 
 var newGeneration = function (grid) {
@@ -126,10 +126,10 @@ var newGeneration = function (grid) {
         memo[rowNr][cellNr] = newState;
       }
       return memo;
-  }, duplicateGrid(grid));
+  }, buildGrid(grid.length, grid[0].length));
 };
 
-var series = function (initial, times) {
+var gameSeries = function (initial, times) {
   // logGrid(initial);
   return _.reduce(_.range(times), function (memo, index) {
     var c = newGeneration(memo[index]);
@@ -138,10 +138,11 @@ var series = function (initial, times) {
   }, [initial]);
 };
 
-var App = function (size) {
+var App = function (sizeX, sizeY) {
   this.interval = 300;
-  this.generations = [initialGrid(size)];
+  this.generations = [initialGrid(sizeX, sizeY)];
   this.current = 0;
+  this.contrast = false;
 }
 
 App.prototype.play = function () {
@@ -158,7 +159,7 @@ App.prototype.play = function () {
       c = newGeneration(_.last(that.generations));
       that.generations.push(c);
     }
-    logGrid(c);
+    logGrid(c, that.contrast ? 'o' : ' ');
   }, this.interval);
 };
 
@@ -185,4 +186,8 @@ App.prototype.stepForward = function () {
   if (this.current < 0) { this.current += 1; }
 
   return this.current;
+}
+
+App.prototype.toggleContrast = function () {
+  this.contrast = !this.contrast;
 }
