@@ -57,6 +57,11 @@ var logGrid = function (grid) {
         return memo += cell ? "X" : " ";
       }, "");
   }, ""));
+  // _.reduce(grid, function (log, row) {
+  //   return log + '\n' + _.reduce(row, function (memo, cell) {
+  //       return memo += cell ? "X" : " ";
+  //     }, "");
+  // }, "");
   // console.log(mapGrid(grid, function (memo, cell) {
   //     return memo += cell ? 'X' : ' ';
   //   }, ""));
@@ -131,4 +136,13 @@ var series = function (initial, times) {
     logGrid(c);
     memo.push(c); return memo;
   }, [initial]);
-}
+};
+
+var live = function (initial, tick) {
+  var stream = [initial];
+  setInterval(function () {
+    var c = newGeneration(_.last(stream));
+    logGrid(c);
+    stream.push(c);
+  }, tick);
+};
