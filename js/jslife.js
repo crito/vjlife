@@ -16,7 +16,7 @@ var mapGrid = function (grid, iterator, initial) {
     return _.reduce(row, function (memo, cell, cellNr) {
       return iterator.call(null, memo, cell, rowNr, cellNr, grid);
     }, context);
-  }, initial)
+  }, initial);
 };
 
 var duplicateGrid = function (grid) {
@@ -39,7 +39,7 @@ var countNeighbours = function (grid, x, y) {
     return neighbourX > 0 && neighbourY > 0 &&
            neighbourX < size && neighbourY < size &&
            grid[neighbourX][neighbourY] ? count + 1 : count;
-  }, 0)
+  }, 0);
 };
 
 var isLiveCell = function (cell, count) {
@@ -49,7 +49,7 @@ var isLiveCell = function (cell, count) {
       function (s, c) { return s && c > 3 ? false : undefined; },
       function (s, c) { return !s && c === 3 ? true : undefined; }
   ))(cell, count);
-}
+};
 
 var logGrid = function (grid, offSymbol) {
   console.log(_.reduce(grid, function (log, row) {
@@ -84,7 +84,7 @@ var tumbler = {
   {x: 4, y: 3},
   {x: 6, y: 4},
     ]
-}
+};
 
 var blinker = {
   turn: ON,
@@ -93,7 +93,7 @@ var blinker = {
   {x: 2, y: 2},
   {x: 2, y: 3},
     ]
-}
+};
 
 var rPentomino = {
   turn: ON,
@@ -104,11 +104,11 @@ var rPentomino = {
   {x: 2, y: 3},
   {x: 3, y: 3},
     ]
-}
+};
 
 // var DATA = tumbler;
-var DATA = blinker;
-// var DATA = rPentomino;
+var DATA = rPentomino;
+// var DATA = blinker;
 
 var initialGrid = function (sizeX, sizeY) {
   var state = DATA.turn,
@@ -179,15 +179,15 @@ App.prototype.stepBack = function () {
   this.current -= 1;
 
   return this.current;
-}
+};
 
 App.prototype.stepForward = function () {
   if (this.intervalID) { this.stop(); }
   if (this.current < 0) { this.current += 1; }
 
   return this.current;
-}
+};
 
 App.prototype.toggleContrast = function () {
   this.contrast = !this.contrast;
-}
+};
