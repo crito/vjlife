@@ -1,8 +1,8 @@
 {
-  "title": "JS Scaffolding",
-  "name": "js.scaffold",
+  "title": "JS Game of Life",
+  "name": "jslife",
   "version": "0.0.1",
-  "description": "A JavaScript based project.",
+  "description": "The game of life in JavaScript.",
   "main": "./dist/lib.js",
   "scripts": {
     "test": "cake test"
@@ -14,32 +14,31 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/crito/repository"
+    "url": "https://github.com/crito/jslife"
   },
   "engines": {
     "node": ">=0.8",
     "npm": ">=1.2"
   },
-  "keywords": [],
+  "keywords": [
+    "game of life",
+    "cellular automaton"
+  ],
   "author": "2014+ Christo Buschek <crito@cryptodrunks.net>",
   "license": {
     "type": "MIT"
   },
   "bugs": {
-    "url": "https://github.com/crito/repository/issues"
+    "url": "https://github.com/crito/jslife/issues"
   },
-  "homepage": "https://github.com/crito/repository",
+  "homepage": "https://github.com/crito/jslife",
   "dependencies": {
     "coffee-script": "~1.6.3"
   },
   "devDependencies": {
-    "projectz": "~0.2.6",
-    "docco": "~0.6.2"
   },
   "maintainers": [
     "Christo Buschek <crito@cryptodrunks.net> (https://crito.github.io)"
   ],
-  "contributors": [
-    "Christo Buschek <crito@cryptodrunks.net> (https://crito.github.io)"
-  ]
+  "contributors": []
 }
