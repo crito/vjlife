@@ -3,7 +3,6 @@
   "name": "jslife",
   "version": "0.0.1",
   "description": "The game of life in JavaScript.",
-  "main": "./dist/lib.js",
   "scripts": {
     "test": "cake test"
   },
@@ -33,9 +32,13 @@
   },
   "homepage": "https://github.com/crito/jslife",
   "dependencies": {
-    "coffee-script": "~1.6.3"
+    "lodash": "~2.4.1"
   },
   "devDependencies": {
+    "coffee-script": "~1.6.3",
+    "mocha": "~1.17.0",
+    "expect.js": "~0.2.0",
+    "sinon": "~1.7.3"
   },
   "maintainers": [
     "Christo Buschek <crito@cryptodrunks.net> (https://crito.github.io)"

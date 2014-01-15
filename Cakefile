@@ -19,8 +19,9 @@ PACKAGE_DATA  = require(PACKAGE_PATH)
 DOCS_DIR      = pathUtil.join(APP_DIR, "docs")
 DOCS_INPUT    = pathUtil.join(APP_DIR, "src", "*")
 SRC_DIR       = pathUtil.join(APP_DIR, "src")
-OUT_DIR       = pathUtil.join(APP_DIR, "dist")
 TEST_DIR      = pathUtil.join(APP_DIR, "test")
+OUT_DIR       = pathUtil.join(APP_DIR, "dist")
+OUT_TEST_DIR  = pathUtil.join(OUT_DIR, "test")
 MODULES_DIR   = pathUtil.join(APP_DIR, "node_modules")
 BIN_DIR       = pathUtil.join(MODULES_DIR, ".bin")
 GIT           = "git"
@@ -28,6 +29,7 @@ CAKE          = pathUtil.join(BIN_DIR, "cake#{EXT}")
 COFFEE        = pathUtil.join(BIN_DIR, "coffee#{EXT}")
 PROJECTZ      = pathUtil.join(BIN_DIR, "projectz#{EXT}")
 DOCCO         = pathUtil.join(BIN_DIR, "docco#{EXT}")
+MOCHA         = pathUtil.join(BIN_DIR, "mocha")
 
 # =====================================
 # Generic
@@ -53,6 +55,11 @@ safe = (next,fn) ->
 finish = (err) ->
   throw err  if err
   console.log('OK')
+
+merge = (dest, objs...) ->
+  for obj in objs
+    dest[k] = v for k, v of obj
+  dest
 
 # =====================================
 # Actions
@@ -101,10 +108,15 @@ actions =
 
   test: (opts,next) ->
     (next = opts; opts = {})  unless next?
+    # compile tests
+    step1 = ->
+      spawn(COFFEE, ['-co', OUT_TEST_DIR, TEST_DIR], {stdio:'inherit', cwd:APP_DIR}).on('close', safe next, step2)
+    # run tests
+    step2 = ->
+      spawn(MOCHA, [OUT_TEST_DIR], {stdio:'inherit', cwd:APP_DIR, env: merge(process.env, {NODE_ENV: 'test'})}).on('close', safe next)
     # cake compile
     actions.compile opts, safe next, ->
-      # npm test
-      spawn(NPM, ['test'], {stdio:'inherit', cwd:APP_DIR}).on('close', safe next)
+      step1()
 
   docs: (opts, next) ->
     (next = opts; opts = {})  unless next?
