@@ -1,8 +1,8 @@
 {
-  "title": "JS Game of Life",
-  "name": "jslife",
+  "title": "VJ of Life",
+  "name": "vj-of-life",
   "version": "0.0.1",
-  "description": "The game of life in JavaScript.",
+  "description": "VJ with the game of life.",
   "scripts": {
     "test": "cake test"
   },
@@ -13,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/crito/jslife"
+    "url": "https://github.com/crito/vj-of-life"
   },
   "engines": {
     "node": ">=0.8",
@@ -21,16 +21,17 @@
   },
   "keywords": [
     "game of life",
-    "cellular automaton"
+    "cellular automaton",
+    "VJ"
   ],
   "author": "2014+ Christo Buschek <crito@cryptodrunks.net>",
   "license": {
     "type": "MIT"
   },
   "bugs": {
-    "url": "https://github.com/crito/jslife/issues"
+    "url": "https://github.com/crito/vj-of-life/issues"
   },
-  "homepage": "https://github.com/crito/jslife",
+  "homepage": "https://github.com/crito/vj-of-life",
   "dependencies": {
     "lodash": "~2.4.1"
   },
