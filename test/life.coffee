@@ -1,5 +1,5 @@
 expect = require('expect.js')
-life   = require('../life')
+life   = require('../out/scripts/lib/life')
 
 describe 'Utility functions', ->
   describe 'internal API', ->

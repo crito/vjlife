@@ -20,8 +20,7 @@ DOCS_DIR      = pathUtil.join(APP_DIR, "docs")
 DOCS_INPUT    = pathUtil.join(APP_DIR, "src", "*")
 SRC_DIR       = pathUtil.join(APP_DIR, "src")
 TEST_DIR      = pathUtil.join(APP_DIR, "test")
-OUT_DIR       = pathUtil.join(APP_DIR, "dist")
-OUT_TEST_DIR  = pathUtil.join(OUT_DIR, "test")
+TEST_OUT_DIR  = pathUtil.join(APP_DIR, "dist")
 MODULES_DIR   = pathUtil.join(APP_DIR, "node_modules")
 BIN_DIR       = pathUtil.join(MODULES_DIR, ".bin")
 GIT           = "git"
@@ -30,6 +29,7 @@ COFFEE        = pathUtil.join(BIN_DIR, "coffee#{EXT}")
 PROJECTZ      = pathUtil.join(BIN_DIR, "projectz#{EXT}")
 DOCCO         = pathUtil.join(BIN_DIR, "docco#{EXT}")
 MOCHA         = pathUtil.join(BIN_DIR, "mocha")
+DOCPAD        = pathUtil.join(BIN_DIR, "docpad")
 
 # =====================================
 # Generic
@@ -65,20 +65,25 @@ merge = (dest, objs...) ->
 # Actions
 
 actions =
+  clean_test: (opts, next) ->
+    (next = opts; opts = {}) unless next?
+    spawn('rm', ['-Rf', TEST_OUT_DIR], {stdio: 'inherit', cwd: APP_DIR}).on('close', safe next)
+    
   clean: (opts,next) ->
     (next = opts; opts = {})  unless next?
-    args = ['-Rf', OUT_DIR]
-    for path in [APP_DIR, TEST_DIR]
+    args = ['-Rf']
+    for path in [APP_DIR]
       args.push(
         pathUtil.join(path,  'build')
         pathUtil.join(path,  'components')
         pathUtil.join(path,  'bower_components')
         pathUtil.join(path,  'node_modules')
-        pathUtil.join(path,  '*out')
-        pathUtil.join(path,  '*log')
+        pathUtil.join(path,  'out')
+        pathUtil.join(path,  'log')
       )
-    # rm
-    spawn('rm', args, {stdio:'inherit', cwd:APP_DIR}).on('close', safe next)
+    actions.clean_test opts, safe next, ->
+      # rm
+      spawn('rm', args, {stdio:'inherit', cwd:APP_DIR}).on('close', safe next)
 
   install: (opts,next) ->
     (next = opts; opts = {})  unless next?
@@ -97,7 +102,7 @@ actions =
     # cake install
     actions.install opts, safe next, ->
       # coffee compile
-      spawn(COFFEE, ['-co', OUT_DIR, SRC_DIR], {stdio:'inherit', cwd:APP_DIR}).on('close', safe next)
+      spawn(DOCPAD, ['generate'], {stdio: 'inherit', cwd:APP_DIR}).on('close', safe next)
 
   watch: (opts,next) ->
     (next = opts; opts = {})  unless next?
@@ -108,14 +113,16 @@ actions =
 
   test: (opts,next) ->
     (next = opts; opts = {})  unless next?
-    # compile tests
-    step1 = ->
-      spawn(COFFEE, ['-co', OUT_TEST_DIR, TEST_DIR], {stdio:'inherit', cwd:APP_DIR}).on('close', safe next, step2)
-    # run tests
-    step2 = ->
-      spawn(MOCHA, [OUT_TEST_DIR], {stdio:'inherit', cwd:APP_DIR, env: merge(process.env, {NODE_ENV: 'test'})}).on('close', safe next)
-    # cake compile
-    actions.compile opts, safe next, ->
+    
+    # clean the test out directory
+    actions.clean_test opts, safe next, ->
+      # compile tests
+      step1 = ->
+        spawn(COFFEE, ['-co', TEST_OUT_DIR, TEST_DIR], {stdio:'inherit', cwd:APP_DIR}).on('close', safe next, step2)
+      # run tests
+      step2 = ->
+        spawn(MOCHA, [TEST_OUT_DIR], {stdio:'inherit', cwd:APP_DIR, env: merge(process.env, {NODE_ENV: 'test'})}).on('close', safe next)
+      # Have 'docpad run' running, to always test against new code
       step1()
 
   docs: (opts, next) ->
@@ -131,7 +138,7 @@ actions =
 
   prepublish: (opts,next) ->
     (next = opts; opts = {})  unless next?
-    actions.docs opts, save next ->
+    actions.docs opts, save next, ->
       step1 = ->
         # cake compile
         actions.compile(opts, safe next, step2)
@@ -163,6 +170,7 @@ actions =
 # Commands
 
 commands =
+  clean_test:  'clean up test build'
   clean:       'clean up instance'
   install:     'install dependencies'
   compile:     'compile our files (runs install)'
