@@ -44,7 +44,8 @@
     "spine-route": "~1.0.0",
     "miniview": "~1.2.0",
     "pointers": "~1.1.3",
-    "docpad-plugin-browserifybundler": "~2.0.3"
+    "docpad-plugin-browserifybundler": "~2.0.3",
+    "express": "~3.4.8"
   },
   "devDependencies": {
     "coffee-script": "~1.6.3",
