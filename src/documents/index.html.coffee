@@ -3,5 +3,8 @@ layout: 'default'
 title: 'Home'
 ---
 
-aside '.app', -> \
-div '.container', ->
+div '.app', ->
+  section '.game-board', ->
+
+aside '.grid-container', -> \
+div '.grid', ->

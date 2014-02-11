@@ -27,11 +27,5 @@ html lang: "en", ->
 
     div class: "container", ->
       text @content
-
-    footer id: "footer", ->
-      div class: "container", ->
-        p class: "text-muted credit", ->
-          mailLink = "mailto:#{@site.email}"
-          "By #{cede => a href: mailLink, @site.author}"
     
     text @getBlock('scripts').add(@site.scripts).toHTML()

@@ -41,7 +41,6 @@ docpadConfig = {
 
 			# Styles
 			styles: [
-				#"//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"
 				"/styles/style.css"
 			]
 
@@ -49,10 +48,9 @@ docpadConfig = {
 			scripts: [
 				"//cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"
 				"//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"
-        #"//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"
-        #"//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.0/backbone-min.js"
-				#"//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"
-				#"/scripts/app-bundled.js"
+        "//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"
+        "//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.0/backbone-min.js"
+				"/scripts/app-bundled.js"
 			]
 
 
@@ -97,11 +95,11 @@ docpadConfig = {
 	# =================================
 	# Plugins
 
-	#plugins:
-    #browserifybundler:
-    #  outFile: '/scripts/app-bundled.js'
-    #  inFiles: '/scripts/app.js'
-    #  excludes: ['jquery', 'backbone', 'underscore']
+	plugins:
+    browserifybundler:
+      outFile: '/scripts/app-bundled.js'
+      inFiles: '/scripts/app.js'
+      excludes: ['jquery', 'backbone', 'underscore']
 
 	# =================================
 	# DocPad Events

@@ -136,7 +136,8 @@ gameSeries = (initial, times, logFunc=logGrid) ->
 # The game class manages the life time of the patterns
 ###
 class Game
-  constructor: (sizeX=5, sizeY=5, pattern=blinker.cells) ->
+  constructor: (sizeX=5, sizeY=5, pattern=blinker.cells, @drawGrid=logGrid) ->
+    console.log(sizeX, sizeY)
     @interval    = 300
     @generations = [initialGrid(pattern, sizeX, sizeY)]
     @current     = 0
@@ -153,7 +154,7 @@ class Game
       else
         c = newGeneration(_.last(@generations))
         @generations.push(c)
-      logGrid(c)
+      @drawGrid(c)
     , @interval
 
   stop: ->
@@ -173,6 +174,7 @@ module.exports =
   initialGrid   : initialGrid
   newGeneration : newGeneration
   gameSeries    : gameSeries
+  reduceGrid    : reduceGrid
   data          :
     tumbler   : tumbler
     blinker   : blinker
